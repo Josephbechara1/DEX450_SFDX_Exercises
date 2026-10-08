@@ -1,0 +1,14 @@
+<template>
+    <lightning-card title={componentLabel} icon-name="standard:user">
+        <div class="slds-var-m-around_medium">
+            <p class="slds-var-m-bottom_small">
+                Status: <strong>{status}</strong>
+            </p>
+            <lightning-button 
+                variant={buttonVariant} 
+                label={buttonLabel} 
+                onclick={handleToggle}>
+            </lightning-button>
+        </div>
+    </lightning-card>
+</template>

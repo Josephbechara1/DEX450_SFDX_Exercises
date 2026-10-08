@@ -1,0 +1,30 @@
+<template>
+    <lightning-card title="Parent Component" icon-name="standard:groups">
+        <div class="slds-var-m-around_medium">
+            <!-- Summary Dashboard -->
+            <div class="slds-box slds-theme_shade slds-var-m-bottom_medium">
+                <p>Total Number of Selections: <strong>{totalSelections}</strong></p>
+                <p class="slds-var-m-top_small">
+        Currently Selected: <strong>{selectedChildrenList}</strong>
+    </p>
+                <lightning-button 
+                    label="Reset All" 
+                    variant="neutral" 
+                    onclick={handleResetAll} 
+                    class="slds-var-m-top_small">
+                </lightning-button>
+            </div>
+
+            <!-- Reusing the Child Component twice (Component 1 & Component 2) -->
+            <!-- Listening to the 'onchildtoggle' event via bubbling -->
+            <div onchildtoggle={handleChildToggle} class="slds-grid slds-gutters">
+                <div class="slds-col">
+                    <c-exercice3child component-label="Child 1"></c-exercice3child>
+                </div>
+                <div class="slds-col">
+                    <c-exercice3child component-label="Child 2"></c-exercice3child>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>
