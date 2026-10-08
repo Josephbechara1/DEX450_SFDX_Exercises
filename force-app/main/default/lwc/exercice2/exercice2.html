@@ -1,0 +1,15 @@
+<template>
+     <lightning-card title="Parent Component" icon-name="custom:custom14">
+        <div class="slds-var-m-around_medium">
+            <lightning-button 
+                label="Increment Counter from Parent" 
+                variant="brand" 
+                onclick={handleParentClick}
+                class="slds-var-m-bottom_medium">
+            </lightning-button>
+
+            <!-- Pass the parent's variable into the child's api property -->
+            <c-exercice2-child counter={parentCounterValue}></c-exercice2-child>
+        </div>
+    </lightning-card>
+</template>

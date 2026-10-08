@@ -1,0 +1,57 @@
+<template>
+    <lightning-card title="Employee Directory" icon-name="standard:address_book">
+        <div class="slds-var-m-around_medium">
+            
+            <!-- 1. Selection Dropdown Layout (Button is removed) -->
+            <div class="slds-grid slds-var-m-bottom_medium">
+                <div class="slds-col slds-size_1-of-1">
+                    <lightning-combobox
+                        name="department"
+                        label="Select Department"
+                        value={selectedDept}
+                        placeholder="-- Choose Department --"
+                        options={departmentOptions}
+                        onchange={handleDropdownChange}>
+                    </lightning-combobox>
+                </div>
+            </div>
+
+            <!-- 2. Instant Filtered Employee List Display -->
+            <!-- FIXED: Changed to look directly at selectedDept -->
+            <template lwc:if={selectedDept}>
+                <div class="slds-var-m-bottom_medium">
+                    <h3 class="slds-text-heading_small slds-var-m-bottom_small">
+                        Employees in {selectedDept}:
+                    </h3>
+                    
+                    <template lwc:if={hasEmployees}>
+                        <ul class="slds-list_dotted">
+                            <template for:each={filterEmployees} for:item="emp">
+                                <li key={emp.id}>
+                                    <a href="#" data-id={emp.id} onclick={handleEmployeeClick}>
+                                        {emp.name}
+                                    </a>
+                                </li>
+                            </template>
+                        </ul>
+                    </template>
+                    <template lwc:else>
+                        <p class="slds-text-color_weak">No employees found in this department.</p>
+                    </template>
+                </div>
+            </template>
+
+            <!-- 3. Employee Detail Card Box -->
+            <template lwc:if={selectedEmployee}>
+                <div class="slds-box slds-theme_shade">
+                    <h3 class="slds-text-heading_small slds-var-m-bottom_small">Employee Details</h3>
+                    <p><strong>Name:</strong> {selectedEmployee.name}</p>
+                    <p><strong>Department:</strong> {selectedEmployee.department}</p>
+                    <p><strong>Position:</strong> {selectedEmployee.position}</p>
+                    <p><strong>ID:</strong> {selectedEmployee.id}</p>
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>
