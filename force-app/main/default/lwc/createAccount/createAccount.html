@@ -1,0 +1,26 @@
+
+<template>
+  <lightning-input type="text"
+  label=" Account Name"
+  value={accountName}
+  onchange={handleAccountNameChange}>
+</lightning-input>
+<lightning-button
+label="Create Account"
+value={accountName}
+onclick={handleCreateAccount}>
+</lightning-button>
+
+    <lightning-input label="how many records do you want to see?"
+    value={maxRecords}
+   variant="brand"
+  class="slds-var-m-top_small" 
+                onchange={handleMaxRecordsChange}  >
+</lightning-input>
+
+    <template for:each={accounts} for:item="acc">
+        <lightning-card key={acc.Id}>{acc.Name}</lightning-card>
+        
+    </template>
+    
+</template>
