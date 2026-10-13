@@ -1,0 +1,74 @@
+<template>
+    <lightning-card title="Create New Quote" icon-name="standard:quote">
+        <div class="slds-p-around_medium">
+            <lightning-record-edit-form 
+                object-api-name="Quote" 
+                onsuccess={handleSuccess}
+                onerror={handleError}
+                onsubmit={handleSubmit}>
+                
+                <lightning-messages></lightning-messages>
+                <!-- Standard Required Fields for Quote -->
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                        <lightning-input-field field-name="Name" required></lightning-input-field>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                        <lightning-input-field field-name="OpportunityId" value={recordId} disabled></lightning-input-field>
+                    </div>
+                </div>
+                <!-- OFFICE & RETAIL -->
+                <template if:true={isOfficeOrRetail}>
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                            <lightning-input-field field-name="Proposed_Start_Date__c" required></lightning-input-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                            <lightning-input-field field-name="End_Date__c" required></lightning-input-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                            <lightning-input-field field-name="Payment_Terms__c" required></lightning-input-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                            <lightning-input-field field-name="Grace_Period__c" required></lightning-input-field>
+                        </div>
+                    </div>
+                </template>
+                <!-- RETAIL ONLY -->
+                <template if:true={isRetail}>
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                            <lightning-input-field field-name="Retail_Sales_Category__c" required></lightning-input-field>
+                        </div>
+                    </div>
+                </template>
+                <!-- LAND -->
+                <template if:true={isLand}>
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                            <lightning-input-field field-name="Proposed_Start_Date__c" required onchange={handleStartDateChange}></lightning-input-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                            <lightning-input-field field-name="Proposed_Duration__c" required onchange={handleDurationChange}></lightning-input-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                            <!-- Read-only or auto-calculated field displayed -->
+                            <lightning-input type="date" label="Proposed End Date" value={calculatedEndDate} disabled></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                            <lightning-input-field field-name="Rent_Review_Frequency__c" required></lightning-input-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                            <lightning-input-field field-name="Payment_Terms__c" value="4" required></lightning-input-field>
+                        </div>
+                    </div>
+                </template>
+                <!-- Form Actions -->
+                <div class="slds-m-top_medium slds-text-align_right">
+                    <lightning-button class="slds-m-right_small" label="Cancel" onclick={handleCancel}></lightning-button>
+                    <lightning-button type="submit" variant="brand" label="Save Quote"></lightning-button>
+                </div>
+            </lightning-record-edit-form>
+        </div>
+    </lightning-card>
+</template>

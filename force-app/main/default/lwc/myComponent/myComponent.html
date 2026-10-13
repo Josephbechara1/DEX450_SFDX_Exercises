@@ -1,0 +1,126 @@
+<template>
+    <lightning-quick-action-panel title="Related Contacts Management">
+        
+        <!-- Main Actions Area -->
+        <div class="slds-m-bottom_medium slds-clearfix">
+            <lightning-button 
+                label="Add New Contact" 
+                variant="brand" 
+                icon-name="utility:add"
+                onclick={openCreateModal}
+                class="slds-float_right">
+            </lightning-button>
+        </div>
+
+        <!-- Spinner Container -->
+        <template if:true={isLoading}>
+            <lightning-spinner alt="Loading..." size="medium"></lightning-spinner>
+        </template>
+
+        <!-- Dynamic Card Layout Container -->
+        <div class="slds-scrollable_y" style="max-height: 400px;">
+            <template if:true={contacts.length}>
+                <!-- GRID OUTER WRAPPER -->
+                <div class="slds-grid slds-wrap slds-gutters_small">
+                    
+                    <!-- LOOPING THROUGH EACH CONTACT -->
+                    <template for:each={contacts} for:item="con">
+                        <!-- Each contact gets its own separate card container (column) -->
+                        <div key={con.Id} class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                            
+                            <!-- INDIVIDUAL CONTACT CARD -->
+                            <lightning-card title={con.LastName} icon-name="standard:contact">
+                                
+                                <!-- Delete Button placed inside the top-right slot of THIS specific card -->
+                                <lightning-button-icon 
+                                    slot="actions" 
+                                    icon-name="utility:delete" 
+                                    variant="border-filled"
+                                    alternative-text="Delete Contact" 
+                                    title="Delete Contact"
+                                    data-id={con.Id}
+                                    onclick={handleCardDeleteClick}>
+                                </lightning-button-icon>
+
+                                <!-- Card Content Details -->
+                                <div class="slds-p-horizontal_small slds-text-body_small">
+                                    <p class="slds-m-bottom_xx-small">
+                                        <strong>First Name:</strong> {con.FirstName}
+                                    </p>
+                                    <p class="slds-m-bottom_xx-small">
+                                        <strong>Email:</strong> {con.Email}
+                                    </p>
+                                    <p class="slds-m-bottom_xx-small">
+                                        <strong>Phone:</strong> {con.Phone}
+                                    </p>
+                                </div>
+                            </lightning-card>
+
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <!-- Empty State Context -->
+            <template if:false={contacts.length}>
+                <p class="slds-text-align_center slds-text-color_weak slds-p-around_medium">
+                    No related contacts found for this account.
+                </p>
+            </template>
+        </div>
+
+        <!-- Secondary Modal: Create New Contact Form -->
+        <template if:true={isCreateModalOpen}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small">
+                <div class="slds-modal__container">
+                    
+                    <!-- Modal Header -->
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeCreateModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" size="small" variant="inverse"></lightning-icon>
+                        </button>
+                        <h2 class="slds-text-heading_medium">Create New Contact</h2>
+                    </header>
+
+                    <!-- Modal Body Form -->
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-record-edit-form 
+                            object-api-name="Contact" 
+                            onsuccess={handleContactCreateSuccess}
+                            onerror={handleContactCreateError}>
+                            <lightning-messages></lightning-messages>
+                            
+                            <!-- Prefill Account Connection -->
+                            <div class="slds-hide">
+                                <lightning-input-field field-name="AccountId" value={recordId}></lightning-input-field>
+                            </div>
+
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                                    <lightning-input-field field-name="FirstName" required></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                                    <lightning-input-field field-name="LastName" required></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                                    <lightning-input-field field-name="Email"></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                                    <lightning-input-field field-name="Phone"></lightning-input-field>
+                                </div>
+                            </div>
+
+                            <!-- Modal Footer Buttons inside Form Context -->
+                            <footer class="slds-modal__footer slds-m-top_medium">
+                                <lightning-button class="slds-m-right_small" label="Cancel" onclick={closeCreateModal}></lightning-button>
+                                <lightning-button label="Save Contact" type="submit" variant="brand"></lightning-button>
+                            </footer>
+                        </lightning-record-edit-form>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+    </lightning-quick-action-panel>
+</template>

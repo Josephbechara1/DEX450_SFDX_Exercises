@@ -31,7 +31,7 @@ public with sharing class CaseController {
             Status = 'New' // Default status
         );
         insert newCase;
-        return newCase;
+        return newCase;  
     }
     
 }

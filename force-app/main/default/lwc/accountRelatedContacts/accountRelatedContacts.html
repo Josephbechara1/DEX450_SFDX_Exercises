@@ -1,0 +1,86 @@
+<template>
+    <!-- Action Bar inside Datatable Modal -->
+    <div class="slds-m-bottom_medium slds-clearfix slds-p-around_medium">
+        <lightning-button 
+            label="Add New Contact" 
+            variant="success" 
+            icon-name="utility:add"
+            class="slds-float_right" 
+            onclick={openNewContactModal}>
+        </lightning-button>
+    </div>
+
+    <!-- Datatable Container -->
+    <div style="height: 300px;" class="slds-p-around_medium">
+        <template if:true={hasContacts}>
+            <lightning-datatable
+                key-field="Id"
+                data={contacts}
+                columns={columns}
+                hide-checkbox-column
+                onrowaction={handleRowAction}>
+            </lightning-datatable>
+        </template>
+        <template if:false={hasContacts}>
+            <p class="slds-align_absolute-center slds-text-heading_small slds-p-around_large" style="color: #747474;">
+                No related contacts found for this account.
+            </p>
+        </template>
+    </div>
+
+    <!-- Nested Modal: Add New Contact Form -->
+    <template if:true={isNewContactModalOpen}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Modal Header -->
+                <header class="slds-modal__header">
+                    <lightning-button-icon 
+                        icon-name="utility:close" 
+                        alternative-text="Close" 
+                        class="slds-modal__close" 
+                        variant="bare-inverse" 
+                        size="large" 
+                        onclick={closeNewContactModal}>
+                    </lightning-button-icon>
+                    <h2 class="slds-modal__title slds-hyphenate">Create New Contact</h2>
+                </header>
+
+                <!-- Modal Body with Record Edit Form -->
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-record-edit-form 
+                        object-api-name="Contact" 
+                        onsuccess={handleContactCreateSuccess}>
+                        <lightning-messages></lightning-messages>
+                        
+                        <!-- Pre-populate Account Lookup -->
+                        <div class="slds-hide">
+                            <lightning-input-field field-name="AccountId" value={recordId}></lightning-input-field>
+                        </div>
+
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                                <lightning-input-field field-name="FirstName"></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                                <lightning-input-field field-name="LastName" required></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                                <lightning-input-field field-name="Email"></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                                <lightning-input-field field-name="Phone"></lightning-input-field>
+                            </div>
+                        </div>
+
+                        <!-- Footer buttons inside form context to allow submit -->
+                        <div class="slds-m-top_medium slds-text-align_right">
+                            <lightning-button class="slds-m-right_small" label="Cancel" onclick={closeNewContactModal}></lightning-button>
+                            <lightning-button type="submit" label="Save Contact" variant="brand"></lightning-button>
+                        </div>
+                    </lightning-record-edit-form>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+</template>
